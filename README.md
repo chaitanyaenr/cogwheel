@@ -33,19 +33,34 @@ Options supported:
 	 prometheus_db_path=str,        str=path to export the prometheus DB
 ```
 
-Images supported:
+Workload Images and OCP clusters supported:
 
-Image | Description | Privileged | Scale Cluster | Starter | OSD |
+Workload Image | Description | Privileged | Scale Cluster | Starter | OSD |
 ----- | ----------- | ---------- | ------------- | ------- | --- |
 ravielluri/image:nodevertical | kubelet density focused test which creates max pods per compute node | False | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 ravielluri/image:mastervertial | control plane density focused test | False | :heavy_check_mark: | :heavy_check_mark: | :heavy_check_mark: |
 BYO ( Bring your own workload ) | Any image which works on OCP cluster | True/False ( False is preferred for it to work on Starter and OSD clusters | NA | NA | NA |
 
-Set the environment variables in cogwheel_env.sh and source it. Available options:
+Create a properties file ( key=value format ), this gets converted to a configmap for the workload. For example for nodevertical, it's just JOB=nodevertical. Set the environment variables in cogwheel_env.sh, source it and run cogwheel:
 ```
 $ source cogwheel_env.sh
 $ ./cogwheel.sh
 ```
 
-#### Credits
+#### Using pbench for running cogwheel and prometheus tarball storage
+
+Assuming that the pbench - https://github.com/distributed-system-analysis/pbench is installed on the host on which cogwheel is running, kickoff cogwheel using pbench:
+
+```
+$ source cogwheel_env.sh
+$ pbench-user-benchmark -C <Test name> -- <cogwheel_dir>/coghweel.sh
+```
+
+Assuming that the pbench server is up and keys are setup correctly, move the results to the pbench server:
+```
+$ pbench-move-results --prefix=<prefix for the results>
+```
+Look for the cogwheel controller hostname for results at https://<pbench_server>/results.
+
+##### Credits
 Created my free logo at LogoMakr.com.
